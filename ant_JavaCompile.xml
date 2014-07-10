@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<project name="VaneServer" default="Deploy" basedir=".">   
+    <!-- Deploy webapp! -->   
+    <target name="Deploy" description="Install application to servlet container" depends="Compile">   
+       
+      	<war destfile="${RELEASE_PATH}/${PROJECT_NAME}.war"  webxml="${SVN_CHECKOUT_PATH}/WebRoot/WEB-INF/web.xml">  
+            <fileset dir="${SVN_CHECKOUT_PATH}/WebRoot" />
+            <lib dir="${SVN_CHECKOUT_PATH}/WebRoot/WEB-INF/lib"   />
+            <classes dir="${SVN_CHECKOUT_PATH}/WebRoot/WEB-INF/classes"/>   
+        </war>
+    </target>   
+    
+    <!-- set classpath -->   
+    <path id="compile.classpath">   
+        <fileset dir="${SVN_CHECKOUT_PATH}/WebRoot/WEB-INF/lib">   
+          <include name="**/*.jar"/>   
+        </fileset>   
+    </path>   
+
+    <!-- Compile java -->   
+    <target name="Compile" description="Compile Java sources" >   
+        <javac includeantruntime="on" 
+            srcdir ="${SVN_CHECKOUT_PATH}/src"
+            destdir="${SVN_CHECKOUT_PATH}/WebRoot/WEB-INF/classes">   
+            <classpath refid="compile.classpath"/>   
+            <compilerarg value="-Xlint:unchecked"/>
+        </javac>   
+
+        <copy todir="${SVN_CHECKOUT_PATH}/WebRoot/WEB-INF/classes" overwrite="true" verbose="true" >   
+            <fileset dir="${SVN_CHECKOUT_PATH}/src" excludes="**/*.java"/>   
+        </copy>    
+    </target>   
+
+      
+
+</project> 
